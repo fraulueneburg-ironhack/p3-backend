@@ -7,7 +7,6 @@ const savingGoalsSchema = new Schema(
         amount: { type: Number, required: true },
         amountSaved: { type: Number },
         time: { type: Number, required: true },
-        timeUnit: { type: string, required: true },
         isReached: { type: Boolean, default: false },
     },
     {
