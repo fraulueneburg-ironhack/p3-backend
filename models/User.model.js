@@ -17,6 +17,7 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Password is required."],
     },
+    monthlyBudget: [{ type: Schema.Types.ObjectId, ref: "monthlyBudget" }],
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
