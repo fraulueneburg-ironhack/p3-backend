@@ -53,7 +53,7 @@ router.post("/login", async (req, res) => {
 
 // CREATE BUDGET ROUTE
 
-router.post("/:userId/budgetSubmit", async (req, res, next) => {
+router.post("/budget/create", isAuthenticated, async (req, res, next) => {
   try {
     const { userId } = req.params;
     const budgetSubmitted = req.body;
