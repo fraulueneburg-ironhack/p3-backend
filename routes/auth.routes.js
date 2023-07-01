@@ -1,4 +1,5 @@
 const User = require("../models/User.model");
+const MonthlyBudget = require("../models/MonthlyBudget.model");
 const bcrypt = require("bcryptjs");
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
@@ -48,6 +49,30 @@ router.post("/login", async (req, res) => {
     console.log(err);
   }
 });
+
+
+// CREATE BUDGET ROUTE
+
+router.post("/:userId/budgetSubmit", async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const budgetSubmitted = req.body;
+    console.log("REQ.BODY: ", budgetSubmitted)
+
+    const user = await User.findById(userId);
+    console.log("THE USER ID", user)
+
+    const newBudget = await MonthlyBudget.create({
+      user: userId,
+      currency: "€",
+      earnings: req.body.earnings,
+      expenses: req.body.expenses,
+    })
+    res.redirect('/:userId/budget' + newBudget.id);
+  } catch (err) {
+    console.log(err);
+  }
+})
 
 //this is the verify route for protected page of your app
 router.get("/verify", isAuthenticated, (req, res) => {
