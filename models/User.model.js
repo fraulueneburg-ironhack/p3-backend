@@ -17,6 +17,8 @@ const userSchema = new Schema(
       required: [true, "Password is required."],
     },
     monthlyBudget: { type: Schema.Types.ObjectId, ref: "monthlyBudget" },
+    savingGoals: [{ type: Schema.Types.ObjectId, ref: "savingGoals" }],
+    dailyExpenses: [{ type: Schema.Types.ObjectId, ref: "dailyExpenses" }],
   },
   {
     timestamps: true,
