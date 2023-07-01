@@ -5,7 +5,10 @@ const savingGoalsSchema = new Schema(
         user: { type: Schema.Types.ObjectId, ref: "user" },
         name: { type: String, required: true },
         amount: { type: Number, required: true },
-        timePeriod: { type: Number, required: true }
+        amountSaved: { type: Number },
+        time: { type: Number, required: true },
+        timeUnit: { type: string, required: true },
+        isReached: { type: Boolean, default: false },
     },
     {
         timestamps: true,
