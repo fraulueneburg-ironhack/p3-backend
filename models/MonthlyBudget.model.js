@@ -6,6 +6,7 @@ const monthlyBudgetSchema = new Schema(
     currency: { type: String, required: true, default: "€" },
     earnings: [{ name: { type: String }, amount: { type: Number } }],
     expenses: [{ name: { type: String }, amount: { type: Number } }],
+    spendingCategories: [{ type: String }]
   },
   {
     timestamps: true,
