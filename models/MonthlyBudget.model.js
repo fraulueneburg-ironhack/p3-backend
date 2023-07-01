@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
 
-// TODO: Please make sure you edit the User model to whatever makes sense in this case
 const monthlyBudgetSchema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: "user" },
@@ -9,7 +8,6 @@ const monthlyBudgetSchema = new Schema(
     expenses: [{ name: { type: String }, amount: { type: Number } }],
   },
   {
-    // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,
   }
 );
