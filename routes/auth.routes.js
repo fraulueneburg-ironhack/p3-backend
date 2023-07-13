@@ -53,4 +53,19 @@ router.get("/verify", isAuthenticated, (req, res) => {
   }
 });
 
+// EDIT PROFILE ROUTE
+router.post("/profile", isAuthenticated, async (req, res) => {
+  const userId = req.payload._id;
+  const newUserInfo = req.body;
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    {
+      name: newUserInfo.name,
+      email: newUserInfo.email,
+      password: newUserInfo.password,
+    },
+    { new: true }
+  );
+});
+
 module.exports = router;
