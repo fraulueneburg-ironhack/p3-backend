@@ -19,8 +19,10 @@ router.post('/create', isAuthenticated, async (req, res) => {
 		const userId = req.payload._id
 		const newBudgetData = req.body
 		const budget = await MonthlyBudget.find({ user: userId })
+		console.log('budget', budget)
+		console.log('req.body', req.body)
 
-		if (budget === []) {
+		if (budget.length === 0) {
 			const newBudget = await MonthlyBudget.create({
 				user: userId,
 				currency: newBudgetData.currency,
@@ -30,6 +32,7 @@ router.post('/create', isAuthenticated, async (req, res) => {
 			})
 			res.status(201).json(newBudget)
 		} else {
+			console.log('I’M IN THE ELSE')
 			const updatedBudget = await MonthlyBudget.findByIdAndUpdate(
 				budget[0]._id,
 				{
@@ -41,6 +44,7 @@ router.post('/create', isAuthenticated, async (req, res) => {
 				{ new: true }
 			)
 			res.status(201).json(updatedBudget)
+			res.redirect(`/budget`)
 		}
 	} catch (err) {
 		console.log(err)
@@ -49,14 +53,14 @@ router.post('/create', isAuthenticated, async (req, res) => {
 
 // DELETE BUDGET ROUTE
 
-router.post('/:budgetId/delete', async (req, res) => {
-	try {
-		const deletedBudget = await MonthlyBudget.findByIdAndDelete({ _id: req.params.budgetId })
-		res.redirect(`/budget`)
-	} catch (err) {
-		console.log(err)
-	}
-})
+// router.post('/:budgetId/delete', async (req, res) => {
+// 	try {
+// 		const deletedBudget = await MonthlyBudget.findByIdAndDelete({ _id: req.params.budgetId })
+// 		res.redirect(`/budget`)
+// 	} catch (err) {
+// 		console.log(err)
+// 	}
+// })
 
 // ADD DAILY EXPENSE ROUTE
 
@@ -81,10 +85,11 @@ router.post('/addexpense', isAuthenticated, async (req, res) => {
 
 // DELETE DAILY EXPENSE ROUTE
 
-router.post('/:dailyExpenseId/delete', async (req, res) => {
+router.delete('/deleteexpense/:dailyExpenseId', isAuthenticated, async (req, res) => {
+	console.log('REQ.PARAMS', req.params)
 	try {
 		const deletedBudget = await DailyExpenses.findByIdAndDelete({ _id: req.params.dailyExpenseId })
-		res.redirect(`/budget`)
+		res.redirect(`/`)
 	} catch (err) {
 		console.log(err)
 	}
