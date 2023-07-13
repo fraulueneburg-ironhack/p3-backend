@@ -35,7 +35,7 @@ router.post("/login", async (req, res) => {
           algorithm: "HS256",
           expiresIn: "6h",
         });
-        console.log("here is my new token", authToken);
+
         res.status(200).json({ authToken });
       }
     } else {
@@ -57,15 +57,30 @@ router.get("/verify", isAuthenticated, (req, res) => {
 router.post("/profile", isAuthenticated, async (req, res) => {
   const userId = req.payload._id;
   const newUserInfo = req.body;
+  const saltRounds = 13;
+  const salt = bcrypt.genSaltSync(saltRounds);
+  const hash = bcrypt.hashSync(newUserInfo.password, salt);
+
   const updatedUser = await User.findByIdAndUpdate(
     userId,
     {
       name: newUserInfo.name,
       email: newUserInfo.email,
-      password: newUserInfo.password,
+      password: hash,
     },
     { new: true }
   );
+});
+
+router.delete("/profile/delete", isAuthenticated, async (req, res) => {
+  const userId = req.payload._id;
+  console.log(userId);
+  try {
+    await MonthlyBudget.deleteOne({ user: userId });
+    await User.findByIdAndDelete(userId, { new: true });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 module.exports = router;
