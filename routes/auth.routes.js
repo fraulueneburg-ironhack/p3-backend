@@ -63,6 +63,12 @@ router.get("/verify", isAuthenticated, (req, res) => {
 });
 
 // EDIT PROFILE ROUTE
+router.get("/profile", isAuthenticated, async (req, res) => {
+  const userId = req.payload._id;
+  const userNeeded = await User.findById(userId);
+  res.json({ userNeeded });
+});
+
 router.post("/profile", isAuthenticated, async (req, res) => {
   const userId = req.payload._id;
   const newUserInfo = req.body;
@@ -79,6 +85,7 @@ router.post("/profile", isAuthenticated, async (req, res) => {
     },
     { new: true }
   );
+  res.status(200).json({ updatedUser });
 });
 
 router.delete("/profile/delete", isAuthenticated, async (req, res) => {
