@@ -12,6 +12,14 @@ router.get('/', isAuthenticated, async (req, res) => {
 	res.json({ respMonthlyBudget: foundMonthlyBudget, respDailyExpenses: foundDailyExpenses })
 })
 
+// BUDGET SETTINGS ROUTE
+
+router.get('/settings', isAuthenticated, async (req, res) => {
+	const userId = req.payload._id
+	const foundMonthlyBudget = await MonthlyBudget.find({ user: userId })
+	res.json({ respMonthlyBudget: foundMonthlyBudget })
+})
+
 // CREATE/UPDATE BUDGET ROUTE
 
 router.post('/create', isAuthenticated, async (req, res) => {
@@ -95,5 +103,4 @@ router.delete('/deleteexpense/:dailyExpenseId', isAuthenticated, async (req, res
 	}
 })
 
-
-module.exports = router;
+module.exports = router
