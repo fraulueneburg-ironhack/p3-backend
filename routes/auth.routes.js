@@ -10,12 +10,21 @@ router.post("/signup", async (req, res) => {
   const saltRounds = 13;
   const salt = bcrypt.genSaltSync(saltRounds);
   const hash = bcrypt.hashSync(req.body.password, salt);
+
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
     password: hash,
   });
-  res.status(201).json(newUser);
+  const { _id, email } = await User.findOne({ email: req.body.email });
+  const payload = { _id, email };
+  console.log(payload);
+  const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+    algorithm: "HS256",
+    expiresIn: "6h",
+  });
+
+  res.status(201).json({ newUser, authToken });
 });
 
 // LOGIN ROUTE
@@ -78,6 +87,7 @@ router.delete("/profile/delete", isAuthenticated, async (req, res) => {
   try {
     await MonthlyBudget.deleteOne({ user: userId });
     await User.findByIdAndDelete(userId, { new: true });
+    res.status(204).json({ message: "deleted User" });
   } catch (err) {
     console.log(err);
   }
